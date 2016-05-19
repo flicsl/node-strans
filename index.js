@@ -6,11 +6,11 @@ var Line = require("./models/line.js");
 var Stop = require("./models/stop.js");
 
 
-var authToken;
-var baseUrl;
-var apiKey;
-var email;
-var password;
+var authToken = null;
+var baseUrl = process.env.STRANS_BASE_URL || null;
+var apiKey = process.env.STRANS_API_KEY || null;
+var email = process.env.STRANS_EMAIL || null;
+var password = process.env.STRANS_PASSWORD || null;
 
 function authenticate(callback){
 	if(!authToken){
