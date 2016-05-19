@@ -18,8 +18,8 @@ function Bus(id) {
 
 method.getLocation = function() {
 	var location = {
-		"latitude" : _latitude,
-		"longitude": _longitude
+		"latitude" : this._latitude,
+		"longitude": this._longitude
 	}
     return location;
 };

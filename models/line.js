@@ -17,14 +17,14 @@ function Line(id) {
 	this._latitude = 1;
 	this._longitude = 1;
 }
+// TODO: GET /paradasLinha?busca=idLine
 method.getStops = function() {
-	//GET /paradasLinha?busca=idLine
 	//return all stops from this line
 	return null;
 };
-method.getBus = function() {
-	//GET /paradasLinha?busca=idLine
-	//return all stops from this line
+// TODO: GET /veiculosLinha?busca=idLine
+method.getBuses = function() {
+	//return all buses from this line
 	return null;
 };
 

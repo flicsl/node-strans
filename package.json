@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/artutra/node-strans#readme",
   "dependencies": {
+    "moment": "^2.13.0",
+    "request-promise": "^3.0.0",
     "requestretry": "^1.8.0"
   }
 }
