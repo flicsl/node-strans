@@ -104,18 +104,21 @@ module.exports = {
 	Stop : Stop,
 	Line : Line
 }
-var getAllBuses = new Promise(function(resolve, reject){
-	authenticate(function(){
-		request(options('/veiculos'))
-		.then(function(body){
-			var arr = [];
-			var lines = JSON.parse(body);
-			for (var i = 0; i < lines.length; i++) {
-				for (var j = lines[i].Linha.Veiculos.length - 1; j >= 0; j--) {
-					arr.push(lines[i].Linha.Veiculos[j]);
+
+function getAllBuses() {
+	return new Promise(function(resolve, reject){
+		authenticate(function(){
+			request(options('/veiculos'))
+			.then(function(body){
+				var arr = [];
+				var lines = JSON.parse(body);
+				for (var i = 0; i < lines.length; i++) {
+					for (var j = lines[i].Linha.Veiculos.length - 1; j >= 0; j--) {
+						arr.push(lines[i].Linha.Veiculos[j]);
+					}
 				}
-			}
-			resolve(arr)
+				resolve(arr);
+			});
 		});
 	});
-});
+}
