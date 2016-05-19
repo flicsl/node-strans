@@ -1,5 +1,6 @@
 var request = require("request-promise");
 var moment = require("moment");
+var Promise = require("promise");
 var Bus = require("./models/bus.js");
 var Line = require("./models/line.js");
 var Stop = require("./models/stop.js");
@@ -84,21 +85,7 @@ module.exports = {
 		});
 	},
 	//GET /veiculos
-	getAllBuses : function(){
-		authenticate(function(){
-			request(options('/veiculos'))
-			.then(function(body){
-				var arr = [];
-				var lines = JSON.parse(body);
-				for (var i = 0; i < lines.length; i++) {
-					for (var j = lines[i].Linha.Veiculos.length - 1; j >= 0; j--) {
-						arr.push(lines[i].Linha.Veiculos[j]);
-					}
-				}
-				console.log(arr);
-			});
-		});
-	},
+	getAllBuses: getAllBuses,
 	setCredentials: function(credentials){
 		baseUrl = credentials.baseUrl;
 		apiKey = credentials.apiKey;
@@ -117,3 +104,18 @@ module.exports = {
 	Stop : Stop,
 	Line : Line
 }
+var getAllBuses = new Promise(function(resolve, reject){
+	authenticate(function(){
+		request(options('/veiculos'))
+		.then(function(body){
+			var arr = [];
+			var lines = JSON.parse(body);
+			for (var i = 0; i < lines.length; i++) {
+				for (var j = lines[i].Linha.Veiculos.length - 1; j >= 0; j--) {
+					arr.push(lines[i].Linha.Veiculos[j]);
+				}
+			}
+			resolve(arr)
+		});
+	});
+});
