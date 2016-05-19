@@ -4,24 +4,27 @@ var Bus = require("./models/bus.js");
 var Line = require("./models/line.js");
 var Stop = require("./models/stop.js");
 
+
 var authToken;
+var baseUrl;
+var apiKey;
+var email;
+var password;
 
-var options = function(route){
-	return {
-		method: 'GET',
-		uri: baseUrl+route,
-		headers: {
-			"Date": moment().format("ddd, DD MMM YYYY HH:mm:ss ") + "GMT",
-			"X-Api-Key": apiKey,
-			"X-Auth-Token" : authToken
-		}
-	};
-
-};
-
-var authenticate = function(callback){
+function authenticate(callback){
 	if(!authToken){
-		request(signInOptions)
+		request({
+			method: 'POST',
+			uri: baseUrl+"/signin",
+			headers: {
+				"Date": moment().format("ddd, DD MMM YYYY HH:mm:ss ") + "GMT",
+				"X-Api-Key": apiKey
+			},
+			json: {
+				"email": email,
+				"password": password
+			}
+		})
 		.then(function(body){
 			authToken = body.token;
 			return callback();
@@ -31,6 +34,17 @@ var authenticate = function(callback){
 		});
 	}
 }
+function options(route){
+	return {
+		method: 'GET',
+		uri: baseUrl+route,
+		headers: {
+			"Date": moment().format("ddd, DD MMM YYYY HH:mm:ss ") + "GMT",
+			"X-Api-Key": apiKey,
+			"X-Auth-Token" : authToken
+		}
+	};
+};
 
 module.exports = {
 	//GET /linhas	
@@ -74,9 +88,30 @@ module.exports = {
 		authenticate(function(){
 			request(options('/veiculos'))
 			.then(function(body){
-				console.log(body);
+				var arr = [];
+				var lines = JSON.parse(body);
+				for (var i = 0; i < lines.length; i++) {
+					for (var j = lines[i].Linha.Veiculos.length - 1; j >= 0; j--) {
+						arr.push(lines[i].Linha.Veiculos[j]);
+					}
+				}
+				console.log(arr);
 			});
 		});
+	},
+	setCredentials: function(credentials){
+		baseUrl = credentials.baseUrl;
+		apiKey = credentials.apiKey;
+		email = credentials.email;
+		password = credentials.password;
+	},
+	getCredentials: function(){
+		return {
+			baseUrl:baseUrl,
+			apiKey:apiKey,
+			email:email,
+			password:password
+		}
 	},
 	Bus : Bus,
 	Stop : Stop,
